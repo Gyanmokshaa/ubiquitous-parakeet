@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GM Business Card generation</title>
+<meta name="description" content="ব্যবসার তথ্য দিন, দুটো বিজনেস কার্ড পান।">
+<meta name="theme-color" content="#161D47">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0B0F2B;--panel:#161D47;--line:#2A3470;--text:#F5F2E8;--muted:#B9BDD8;--gold:#F3D98E;--err:#FF8A8A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Hind Siliguri',system-ui,sans-serif;line-height:1.5}
+main{max-width:720px;margin:0 auto;padding:24px 16px 48px}
+h1{font-size:1.6rem;margin:0 0 4px;color:var(--gold)}
+.sub{margin:0 0 24px;color:var(--muted)}
+form{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px}
+label{display:block;font-weight:600;margin:14px 0 6px}
+label:first-child{margin-top:0}
+input[type=text],input[type=tel]{width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:#0F1538;color:var(--text);font:inherit;font-size:1rem}
+input:focus{outline:2px solid var(--gold);outline-offset:1px}
+.phone{display:flex;gap:8px;align-items:center}
+.phone span{padding:12px;border-radius:10px;background:#0F1538;border:1px solid var(--line);color:var(--muted)}
+.colors{display:flex;flex-wrap:wrap;gap:10px}
+.colors label{margin:0;font-weight:400;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;font-size:.85rem;color:var(--muted)}
+.colors input{position:absolute;opacity:0;pointer-events:none}
+.sw{width:44px;height:44px;border-radius:50%;border:3px solid transparent;box-shadow:0 0 0 1px var(--line)}
+.colors input:checked+.sw{border-color:var(--gold)}
+.colors input:focus-visible+.sw{outline:2px solid var(--gold);outline-offset:2px}
+.consent{display:flex;gap:10px;align-items:flex-start;font-weight:400;margin-top:18px}
+.consent input{margin-top:5px;width:18px;height:18px}
+button{font:inherit;font-weight:700;border:0;border-radius:10px;padding:12px 18px;cursor:pointer}
+.primary{width:100%;margin-top:18px;background:var(--gold);color:#161D47;font-size:1.05rem}
+.primary:disabled{opacity:.6;cursor:wait}
+.msg{min-height:1.5em;margin:10px 0 0;color:var(--err)}
+#result{display:none;margin-top:28px}
+#result h2{font-size:1.2rem;margin:0 0 12px;color:var(--gold)}
+.card{margin:0 0 22px}
+.card canvas{width:100%;height:auto;border-radius:12px;display:block;box-shadow:0 6px 24px rgba(0,0,0,.4)}
+.acts{display:flex;gap:10px;margin-top:10px}
+.acts button{flex:1;background:#232C66;color:var(--text);border:1px solid var(--line)}
+.again{background:transparent;color:var(--gold);border:1px solid var(--gold);width:100%}
+footer{margin-top:32px;text-align:center;color:var(--muted);font-size:.85rem}
+</style>
+</head>
+<body>
+<main>
+<h1>GM Business Card generation</h1>
+<p class="sub">ব্যবসার তথ্য দিন, একই তথ্য দিয়ে দুটো বিজনেস কার্ড পেয়ে যাবেন।</p>
+
+<form id="f" novalidate>
+  <label for="businessName">ব্যবসার নাম</label>
+  <input id="businessName" type="text" maxlength="60" autocomplete="organization" required>
+
+  <label for="productType">পণ্যের ধরন</label>
+  <input id="productType" type="text" maxlength="60" placeholder="যেমন: শাড়ি ও গয়না" required>
+
+  <label for="phone">ফোন নম্বর</label>
+  <div class="phone"><span>+৯১</span><input id="phone" type="tel" inputmode="tel" maxlength="16" autocomplete="tel-national" placeholder="১০ সংখ্যার মোবাইল নম্বর" required></div>
+
+  <label for="facebook">ফেসবুক পেজ</label>
+  <input id="facebook" type="text" maxlength="120" placeholder="পেজের লিঙ্ক বা নাম" required>
+
+  <label for="instagram">ইনস্টাগ্রাম</label>
+  <input id="instagram" type="text" maxlength="60" placeholder="@আইডি" required>
+
+  <label id="colorLabel">কার্ডের রং</label>
+  <div class="colors" role="radiogroup" aria-labelledby="colorLabel" id="colors"></div>
+
+  <label class="consent"><input id="consent" type="checkbox"> <span>আমি রাজি যে এই তথ্য GM Business Card generation জমা রাখবে।</span></label>
+
+  <button class="primary" id="go" type="submit">কার্ড বানাও</button>
+  <p class="msg" id="msg" role="alert"></p>
+</form>
+
+<section id="result" aria-live="polite">
+  <h2>আপনার দুটো কার্ড</h2>
+  <div class="card"><canvas id="c1" width="1050" height="600" aria-label="প্রথম ডিজাইন"></canvas>
+    <div class="acts"><button data-i="1" data-a="dl">ডাউনলোড</button><button data-i="1" data-a="sh">শেয়ার</button></div></div>
+  <div class="card"><canvas id="c2" width="1050" height="600" aria-label="দ্বিতীয় ডিজাইন"></canvas>
+    <div class="acts"><button data-i="2" data-a="dl">ডাউনলোড</button><button data-i="2" data-a="sh">শেয়ার</button></div></div>
+  <button class="again" id="again" type="button">তথ্য বদলে আবার বানাও</button>
+</section>
+
+<footer>Gyanmokshaa LLP</footer>
+</main>
+
+<script>
+const COLORS = {
+  blue:   { name: 'নীল',    main: '#1E3A8A', deep: '#13265C' },
+  green:  { name: 'সবুজ',   main: '#166534', deep: '#0D3F20' },
+  maroon: { name: 'মেরুন',  main: '#8B1E3F', deep: '#5C1229' },
+  purple: { name: 'বেগুনি', main: '#5B21B6', deep: '#3B1578' },
+  black:  { name: 'কালো',   main: '#1F2937', deep: '#0B1018' },
+  orange: { name: 'কমলা',   main: '#C2410C', deep: '#7C2A08' }
+};
+const GOLD = '#F3D98E', FONT = "'Hind Siliguri', sans-serif";
+const $ = id => document.getElementById(id);
+const bnDigits = s => String(s).replace(/\d/g, d => '০১২৩৪৫৬৭৮৯'[d]);
+const enDigits = s => String(s).replace(/[০-৯]/g, d => '০১২৩৪৫৬৭৮৯'.indexOf(d));
+
+$('colors').innerHTML = Object.entries(COLORS).map(([k, c], i) =>
+  `<label><input type="radio" name="color" value="${k}"${i ? '' : ' checked'}><span class="sw" style="background:${c.main}"></span>${c.name}</label>`).join('');
+
+function cleanPhone(v) {
+  let p = enDigits(v).replace(/\D/g, '');
+  if (p.length === 12 && p.startsWith('91')) p = p.slice(2);
+  if (p.length === 11 && p.startsWith('0')) p = p.slice(1);
+  return p;
+}
+function fbText(v) {
+  const s = v.trim().replace(/^https?:\/\//i, '').replace(/^(www\.|m\.|web\.)/i, '').replace(/\/+$/, '');
+  const m = s.match(/^(facebook\.com|fb\.com)\/(.+)$/i);
+  return m ? 'fb.com/' + m[2] : s;
+}
+function igText(v) {
+  const s = v.trim().replace(/^https?:\/\//i, '').replace(/^www\./i, '').replace(/\/+$/, '');
+  const m = s.match(/^instagram\.com\/([^/?#]+)/i);
+  return '@' + (m ? m[1] : s).replace(/^@+/, '');
+}
+const phoneText = p => '+৯১ ' + bnDigits(p.slice(0, 5)) + ' ' + bnDigits(p.slice(5));
+
+// Largest font size (down to min) at which text fits in width; wraps to two lines if needed.
+function fit(ctx, text, maxW, size, min, weight, lines = 1) {
+  const one = s => { ctx.font = `${weight} ${s}px ${FONT}`; return ctx.measureText(text).width <= maxW; };
+  const two = s => {
+    ctx.font = `${weight} ${s}px ${FONT}`;
+    const words = text.split(/\s+/);
+    let best = null;
+    for (let i = 1; i < words.length; i++) {
+      const a = words.slice(0, i).join(' '), b = words.slice(i).join(' ');
+      const w = Math.max(ctx.measureText(a).width, ctx.measureText(b).width);
+      if (w <= maxW && (!best || w < best.w)) best = { w, lines: [a, b] };
+    }
+    return best && best.lines;
+  };
+  // Keep one line while the text stays large; then try two lines; then shrink further.
+  const floor = lines > 1 ? Math.round(size * 0.72) : min;
+  for (let s = size; s >= floor; s -= 2) if (one(s)) return { size: s, lines: [text] };
+  if (lines > 1) for (let s = size; s >= min; s -= 2) { const l = two(s); if (l) return { size: s, lines: l }; }
+  for (let s = floor; s >= min; s -= 2) if (one(s)) return { size: s, lines: [text] };
+  ctx.font = `${weight} ${min}px ${FONT}`;
+  let t = text;
+  while (t.length > 1 && ctx.measureText(t + '…').width > maxW) t = t.slice(0, -1);
+  return { size: min, lines: [t === text ? t : t + '…'] };
+}
+function draw(ctx, f, x, y, align, color) {
+  ctx.textAlign = align; ctx.fillStyle = color;
+  ctx.font = `${f.weight} ${f.size}px ${FONT}`;
+  f.lines.forEach((l, i) => ctx.fillText(l, x, y + i * f.size * 1.15));
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+}
+// Bengali labels and digits when the business name is in Bengali; English otherwise.
+function contactRows(d) {
+  const bn = /[\u0980-\u09FF]/.test(d.businessName);
+  const ph = bn ? phoneText(d.phone) : '+91 ' + d.phone.slice(0, 5) + ' ' + d.phone.slice(5);
+  return bn ? [['ফোন', ph], ['ফেসবুক', fbText(d.facebook)], ['ইনস্টাগ্রাম', igText(d.instagram)]]
+            : [['Phone', ph], ['Facebook', fbText(d.facebook)], ['Instagram', igText(d.instagram)]];
+}
+// Fits a contact value on one line, or splits a very long link over two lines so nothing is cut.
+function fitValue(ctx, v, maxW) {
+  const f = fit(ctx, v, maxW, 30, 20, 600);
+  if (f.lines[0] === v) return f;
+  ctx.font = `600 22px ${FONT}`;
+  let i = v.length;
+  while (i > 1 && ctx.measureText(v.slice(0, i)).width > maxW) i--;
+  const cut = Math.max(v.lastIndexOf('/', i), v.lastIndexOf('.', i), v.lastIndexOf('_', i));
+  const at = cut > i * 0.5 ? cut + 1 : i;
+  const rest = fit(ctx, v.slice(at), maxW, 22, 16, 600);
+  return { size: 22, lines: [v.slice(0, at), rest.lines[0]] };
+}
+function contacts(ctx, d, x, y, maxW, labelColor, valueColor, align) {
+  let yy = y;
+  contactRows(d).forEach(([k, v]) => {
+    ctx.textBaseline = 'alphabetic';
+    if (align === 'center') {
+      const f = fitValue(ctx, `${k}: ${v}`, maxW);
+      draw(ctx, { ...f, weight: 600 }, x, yy, 'center', valueColor);
+      yy += 46 + (f.lines.length - 1) * f.size * 1.15;
+    } else {
+      ctx.font = `400 26px ${FONT}`; ctx.fillStyle = labelColor; ctx.textAlign = 'left';
+      ctx.fillText(k, x, yy);
+      const f = fitValue(ctx, v, maxW - 150);
+      draw(ctx, { ...f, weight: 600 }, x + 150, yy, 'left', valueColor);
+      yy += 46 + (f.lines.length - 1) * f.size * 1.15;
+    }
+  });
+}
+
+// Design 1: full colour background, centred, gold frame.
+function design1(cv, d) {
+  const ctx = cv.getContext('2d'), W = cv.width, H = cv.height, c = COLORS[d.color];
+  const g = ctx.createLinearGradient(0, 0, W, H); g.addColorStop(0, c.main); g.addColorStop(1, c.deep);
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = GOLD; ctx.lineWidth = 4; roundRect(ctx, 28, 28, W - 56, H - 56, 18); ctx.stroke();
+  const name = fit(ctx, d.businessName, W - 160, 84, 40, 700, 2);
+  const block = name.size + (name.lines.length - 1) * name.size * 1.15 + 62 + 30 + 66 + 2 * 46;
+  const top = (H - block) / 2 + name.size * 0.8;
+  draw(ctx, { ...name, weight: 700 }, W / 2, top, 'center', '#FFFFFF');
+  const after = top + (name.lines.length - 1) * name.size * 1.15;
+  const prod = fit(ctx, d.productType, W - 200, 38, 22, 600);
+  draw(ctx, { ...prod, weight: 600 }, W / 2, after + 62, 'center', GOLD);
+  ctx.fillStyle = GOLD; ctx.fillRect(W / 2 - 60, after + 92, 120, 3);
+  contacts(ctx, d, W / 2, after + 158, W - 180, GOLD, '#FFFFFF', 'center');
+}
+
+// Design 2: white card, colour band on the left with the first letter.
+function design2(cv, d) {
+  const ctx = cv.getContext('2d'), W = cv.width, H = cv.height, c = COLORS[d.color];
+  ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, W, H);
+  const band = 300;
+  ctx.fillStyle = c.main; ctx.fillRect(0, 0, band, H);
+  ctx.fillStyle = GOLD; ctx.fillRect(band, 0, 8, H);
+  const first = Array.from(d.businessName.trim())[0] || '';
+  const initial = /[ঀ-৿]/.test(first) ? (d.businessName.trim().match(/^[ঀ-৿][়-ৗৢৣঁ-ঃ]*/) || [first])[0] : first.toUpperCase();
+  ctx.font = `700 170px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = '#FFFFFF'; ctx.textBaseline = 'middle';
+  ctx.fillText(initial, band / 2, H / 2 + 10);
+  ctx.textBaseline = 'alphabetic';
+  const x = band + 60, maxW = W - x - 50;
+  const name = fit(ctx, d.businessName, maxW, 70, 34, 700, 2);
+  const block = name.size + (name.lines.length - 1) * name.size * 1.15 + 52 + 28 + 70 + 2 * 46;
+  const top = (H - block) / 2 + name.size * 0.8;
+  draw(ctx, { ...name, weight: 700 }, x, top, 'left', c.deep);
+  const after = top + (name.lines.length - 1) * name.size * 1.15;
+  const prod = fit(ctx, d.productType, maxW, 34, 20, 600);
+  draw(ctx, { ...prod, weight: 600 }, x, after + 52, 'left', c.main);
+  ctx.fillStyle = c.main; ctx.fillRect(x, after + 80, 90, 3);
+  contacts(ctx, d, x, after + 150, maxW, '#6B7280', '#111827', 'left');
+}
+
+let data = null;
+async function render(d) {
+  await document.fonts.load(`700 40px 'Hind Siliguri'`).catch(() => {});
+  await document.fonts.load(`600 40px 'Hind Siliguri'`).catch(() => {});
+  await document.fonts.load(`400 40px 'Hind Siliguri'`).catch(() => {});
+  design1($('c1'), d); design2($('c2'), d);
+  $('result').style.display = 'block';
+  $('result').scrollIntoView({ behavior: 'smooth' });
+}
+
+$('f').addEventListener('submit', async e => {
+  e.preventDefault();
+  const d = {
+    businessName: $('businessName').value.trim(),
+    productType: $('productType').value.trim(),
+    phone: cleanPhone($('phone').value),
+    facebook: $('facebook').value.trim(),
+    instagram: $('instagram').value.trim(),
+    color: (document.querySelector('input[name=color]:checked') || {}).value,
+    consent: $('consent').checked
+  };
+  const msg = $('msg'); msg.textContent = '';
+  if (!d.businessName) return msg.textContent = 'ব্যবসার নাম দিন।';
+  if (!d.productType) return msg.textContent = 'পণ্যের ধরন দিন।';
+  if (!/^[6-9]\d{9}$/.test(d.phone)) return msg.textContent = 'ভারতের ১০ সংখ্যার মোবাইল নম্বর দিন।';
+  if (!d.facebook) return msg.textContent = 'ফেসবুক পেজের লিঙ্ক বা নাম দিন।';
+  if (!d.instagram.replace(/^@+/, '')) return msg.textContent = 'ইনস্টাগ্রাম আইডি দিন।';
+  if (!d.color) return msg.textContent = 'কার্ডের রং বেছে নিন।';
+  if (!d.consent) return msg.textContent = 'তথ্য জমা রাখার সম্মতিতে টিক দিন।';
+  $('go').disabled = true; $('go').textContent = 'বানানো হচ্ছে…';
+  try {
+    const r = await fetch('/api/save', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok || !j.ok) throw new Error();
+    data = d;
+    await render(d);
+  } catch {
+    msg.textContent = 'তথ্য জমা হয়নি। একটু পরে আবার চেষ্টা করুন।';
+  } finally {
+    $('go').disabled = false; $('go').textContent = 'কার্ড বানাও';
+  }
+});
+
+const fileName = i => `${(data.businessName || 'card').replace(/[\\/:*?"<>|\s]+/g, '-')}-${i}.png`;
+const blobOf = cv => new Promise(r => cv.toBlob(r, 'image/png'));
+document.querySelectorAll('.acts button').forEach(b => b.addEventListener('click', async () => {
+  const i = b.dataset.i, cv = $('c' + i), blob = await blobOf(cv);
+  if (b.dataset.a === 'sh') {
+    const file = new File([blob], fileName(i), { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try { await navigator.share({ files: [file], title: data.businessName }); } catch {}
+      return;
+    }
+  }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = fileName(i); a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}));
+$('again').addEventListener('click', () => { $('result').style.display = 'none'; $('f').scrollIntoView({ behavior: 'smooth' }); });
+</script>
+</body>
+</html>
