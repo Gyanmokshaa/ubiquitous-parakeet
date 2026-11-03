@@ -195,6 +195,12 @@ function contacts(ctx, d, x, y, maxW, labelColor, valueColor, align) {
   });
 }
 
+// Small, faint site mark in the bottom-right corner.
+function watermark(ctx, x, y, color) {
+  ctx.font = `400 17px ${FONT}`; ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic';
+  ctx.fillStyle = color; ctx.fillText('www.gyanmokshaa.com', x, y);
+}
+
 // Design 1: full colour background, centred, gold frame.
 function design1(cv, d) {
   const ctx = cv.getContext('2d'), W = cv.width, H = cv.height, c = COLORS[d.color];
@@ -210,6 +216,7 @@ function design1(cv, d) {
   draw(ctx, { ...prod, weight: 600 }, W / 2, after + 62, 'center', GOLD);
   ctx.fillStyle = GOLD; ctx.fillRect(W / 2 - 60, after + 92, 120, 3);
   contacts(ctx, d, W / 2, after + 158, W - 180, GOLD, '#FFFFFF', 'center');
+  watermark(ctx, W - 48, H - 44, 'rgba(255,255,255,0.35)');
 }
 
 // Design 2: white card, colour band on the left with the first letter.
@@ -234,6 +241,7 @@ function design2(cv, d) {
   draw(ctx, { ...prod, weight: 600 }, x, after + 52, 'left', c.main);
   ctx.fillStyle = c.main; ctx.fillRect(x, after + 80, 90, 3);
   contacts(ctx, d, x, after + 150, maxW, '#6B7280', '#111827', 'left');
+  watermark(ctx, W - 28, H - 22, 'rgba(17,24,39,0.28)');
 }
 
 let data = null;
