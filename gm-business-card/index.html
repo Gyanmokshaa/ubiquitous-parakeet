@@ -160,7 +160,7 @@ function roundRect(ctx, x, y, w, h, r) {
 }
 // Bengali labels and digits when the business name is in Bengali; English otherwise.
 function contactRows(d) {
-  const bn = /[\u0980-\u09FF]/.test(d.businessName);
+  const bn = /[ঀ-৿]/.test(d.businessName);
   const ph = bn ? phoneText(d.phone) : '+91 ' + d.phone.slice(0, 5) + ' ' + d.phone.slice(5);
   return bn ? [['ফোন', ph], ['ফেসবুক', fbText(d.facebook)], ['ইনস্টাগ্রাম', igText(d.instagram)]]
             : [['Phone', ph], ['Facebook', fbText(d.facebook)], ['Instagram', igText(d.instagram)]];
@@ -227,7 +227,7 @@ function design2(cv, d) {
   ctx.fillStyle = c.main; ctx.fillRect(0, 0, band, H);
   ctx.fillStyle = GOLD; ctx.fillRect(band, 0, 8, H);
   const first = Array.from(d.businessName.trim())[0] || '';
-  const initial = /[ঀ-৿]/.test(first) ? (d.businessName.trim().match(/^[ঀ-৿][়-ৗৢৣঁ-ঃ]*/) || [first])[0] : first.toUpperCase();
+  const initial = /[ঀ-৿]/.test(first) ? (d.businessName.trim().match(/^[ঀ-৿][ঁ-ঃ়-ৗৢৣ]*/) || [first])[0] : first.toUpperCase();
   ctx.font = `700 170px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = '#FFFFFF'; ctx.textBaseline = 'middle';
   ctx.fillText(initial, band / 2, H / 2 + 10);
   ctx.textBaseline = 'alphabetic';
