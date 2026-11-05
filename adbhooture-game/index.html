@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d0712">
+<title>অদ্ভুতুড়ে: রাত বারোটার কলকাতা</title>
+<meta name="description" content="রাত বারোটার কলকাতা। লোডশেডিং, পুরনো বাড়ি, আর একটা ফোন যা বাজার কথা নয়। অদ্ভুতুড়ে পেজের একটি বাংলা ভৌতিক খেলা।">
+<meta property="og:title" content="অদ্ভুতুড়ে: রাত বারোটার কলকাতা">
+<meta property="og:description" content="রাত বারোটা। লোডশেডিং। ফোনটা আবার বাজছে।">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230d0712'/%3E%3Ccircle cx='44' cy='18' r='9' fill='%23efe3c8'/%3E%3Crect x='28' y='34' width='8' height='20' fill='%23efe3c8'/%3E%3Cpath d='M32 22c4 5 4 9 0 12c-4-3-4-7 0-12z' fill='%23f2a640'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Galada&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app" class="fear-0">
+  <div id="fx-candle" aria-hidden="true"></div>
+  <div id="fx-vignette" aria-hidden="true"></div>
+  <div id="fx-grain" aria-hidden="true"></div>
+
+  <!-- TITLE -->
+  <section id="scr-title" class="screen active" aria-label="শুরু">
+    <div class="title-art" id="title-art"></div>
+    <h1 class="game-title">অদ্ভুতুড়ে</h1>
+    <p class="game-sub">রাত বারোটার কলকাতা</p>
+    <p class="credit-top">~ সুচন্দ্রা দাস</p>
+    <div class="menu">
+      <button class="btn paper" id="btn-new">নতুন রাত</button>
+      <button class="btn paper" id="btn-continue" hidden>চালিয়ে যাও</button>
+      <button class="btn paper ghost" id="btn-gallery">সংগৃহীত সমাপ্তি <span id="title-count"></span></button>
+      <button class="btn ghost small sound-btn" data-sound>🔇 শব্দ: বন্ধ</button>
+    </div>
+    <p class="hint">হেডফোনে, আলো নিভিয়ে খেলুন।</p>
+    <a class="fb-small" href="https://facebook.com/Adbhooture" target="_blank" rel="noopener">facebook.com/Adbhooture</a>
+  </section>
+
+  <!-- STORY -->
+  <section id="scr-story" class="screen" aria-label="গল্প">
+    <header class="hud">
+      <button class="hud-btn" id="btn-menu" aria-label="মেনু">☰</button>
+      <span class="clock" id="hud-clock"></span>
+      <span class="fear" id="hud-fear" aria-label="ভয়"></span>
+      <button class="hud-btn" id="btn-items" aria-label="সঙ্গের জিনিস">🎒<span id="items-n"></span></button>
+      <button class="hud-btn sound-btn" data-sound aria-label="শব্দ">🔇</button>
+    </header>
+    <div class="story-scroll" id="story-scroll">
+      <div class="scene" id="scene"></div>
+      <div class="passage" id="passage"></div>
+      <div class="choices" id="choices"></div>
+    </div>
+    <div class="items-panel" id="items-panel" hidden>
+      <div class="items-inner paper-strip">
+        <h3>সঙ্গে যা আছে</h3>
+        <ul id="items-list"></ul>
+        <button class="btn ghost small" id="items-close">বন্ধ করো</button>
+      </div>
+    </div>
+    <div class="items-panel" id="menu-panel" hidden>
+      <div class="items-inner paper-strip">
+        <h3>থামো</h3>
+        <button class="btn paper" id="menu-resume">গল্পে ফেরো</button>
+        <button class="btn paper ghost" id="menu-title">শুরুর পাতায়</button>
+        <button class="btn paper ghost" id="menu-restart">নতুন করে শুরু</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENDING -->
+  <section id="scr-ending" class="screen" aria-label="সমাপ্তি">
+    <div class="end-wrap">
+      <p class="end-num" id="end-num"></p>
+      <h2 class="end-title" id="end-title"></h2>
+      <p class="end-line" id="end-line"></p>
+      <div class="card-wrap"><img id="end-card" alt="সমাপ্তির কার্ড"></div>
+      <div class="row">
+        <button class="btn paper" id="btn-download">ছবি নামাও</button>
+        <button class="btn paper" id="btn-share">শেয়ার করো</button>
+      </div>
+      <p class="secret-hint" id="secret-hint" hidden>এই রাতের একটা সত্যি শেষও আছে। যা জেনেছ, তা মনে রেখো।</p>
+      <button class="btn paper" id="btn-again">আবার এই রাতে ফিরে যাও</button>
+      <button class="btn paper ghost" id="btn-end-gallery">সংগৃহীত সমাপ্তি</button>
+      <div class="follow paper-strip">
+        <p>আরও ভয়ের গল্পের জন্য অদ্ভুতুড়ে পেজটি ফলো করুন</p>
+        <a class="btn fb" href="https://facebook.com/Adbhooture" target="_blank" rel="noopener">facebook.com/Adbhooture</a>
+      </div>
+      <p class="credit">~ সুচন্দ্রা দাস</p>
+      <p class="credit-tiny">Adbhooture by Gyanmokshaa</p>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="scr-gallery" class="screen" aria-label="সংগৃহীত সমাপ্তি">
+    <div class="end-wrap">
+      <h2 class="end-title">সংগৃহীত সমাপ্তি</h2>
+      <p class="end-num" id="gal-count"></p>
+      <div class="gallery" id="gallery"></div>
+      <button class="btn paper" id="gal-back">ফিরে যাও</button>
+      <button class="btn paper ghost" id="gal-follow">শেষ পাতা</button>
+    </div>
+  </section>
+
+  <!-- FOLLOW / FINAL -->
+  <section id="scr-follow" class="screen" aria-label="শেষ পাতা">
+    <div class="end-wrap center">
+      <div class="title-art small" id="follow-art"></div>
+      <h2 class="end-title">রাত শেষ হয়। গল্প হয় না।</h2>
+      <p class="end-line" id="follow-msg">কলকাতার পুরনো গলিতে আরও অনেক দরজা আছে, যেগুলো রাতে নিজে থেকে খোলে।</p>
+      <div class="follow paper-strip">
+        <p>আরও ভয়ের গল্পের জন্য অদ্ভুতুড়ে পেজটি ফলো করুন</p>
+        <a class="btn fb" href="https://facebook.com/Adbhooture" target="_blank" rel="noopener">facebook.com/Adbhooture</a>
+      </div>
+      <button class="btn paper ghost" id="follow-back">শুরুর পাতায়</button>
+      <p class="credit">~ সুচন্দ্রা দাস</p>
+      <p class="credit-tiny">Adbhooture by Gyanmokshaa</p>
+    </div>
+  </section>
+
+  <div id="toast" class="toast" aria-live="polite"></div>
+</div>
+<script src="story.js"></script>
+<script src="art.js"></script>
+<script src="audio.js"></script>
+<script src="share.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
