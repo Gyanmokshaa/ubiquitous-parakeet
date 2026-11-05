@@ -72,9 +72,9 @@ button{font-family:inherit;color:inherit}
 .hud-btn{min-width:48px;min-height:48px;background:none;border:0;font-size:20px;color:var(--paper2);cursor:pointer;position:relative}
 .hud-btn #items-n{position:absolute;right:4px;top:6px;font-size:12px;background:var(--blood);color:#fff;border-radius:9px;min-width:17px;line-height:17px;padding:0 3px}
 .hud-btn #items-n:empty{display:none}
-.clock{flex:1;font-size:15px;color:var(--paper2);opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.clock{flex:1;min-width:0;font-size:14px;color:var(--paper2);opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .fear{display:flex;gap:2px;align-items:flex-end;height:20px}
-.fear i{display:block;width:4px;height:8px;background:#3a2846;border-radius:2px;transition:all .6s}
+.fear i{display:block;width:3px;height:8px;background:#3a2846;border-radius:2px;transition:all .6s}
 .fear i.on{background:var(--blood);height:16px;box-shadow:0 0 6px rgba(200,40,40,.6)}
 .story-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:0 14px calc(env(safe-area-inset-bottom) + 28px);margin-top:-8px}
 .scene{width:100%;max-width:520px;margin:0 auto 8px;aspect-ratio:400/240;overflow:hidden;
