@@ -19,6 +19,7 @@ cleanup() { run pg_ctl -D "$TMP/data" -m immediate stop >/dev/null 2>&1 || true;
 trap cleanup EXIT
 run initdb -D "$TMP/data" -U postgres -A trust >/dev/null
 run pg_ctl -D "$TMP/data" -o "-p $PORT -k $TMP -c listen_addresses=''" -l "$TMP/log" -w start >/dev/null
+export PGOPTIONS="-c client_min_messages=warning"
 PSQL=(psql -h "$TMP" -p "$PORT" -U postgres -v ON_ERROR_STOP=1 -q)
 "${PSQL[@]}" -c "create database khata" >/dev/null
 "${PSQL[@]}" -d khata -f "$HERE/stub_auth.sql" >/dev/null

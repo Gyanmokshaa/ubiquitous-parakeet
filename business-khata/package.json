@@ -1,0 +1,16 @@
+{
+  "name": "business-khata",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ব্যবসার খাতা: ছোট ব্যবসার জন্য বাংলা হিসাবের ওয়েব অ্যাপ (Vercel + Supabase)",
+  "type": "module",
+  "scripts": {
+    "build": "echo 'কোনো বিল্ড লাগে না'",
+    "dev": "node tests/serve.js",
+    "test": "node --test tests/unit/*.test.js",
+    "test:e2e": "node tests/e2e/run.js",
+    "test:sql": "bash tests/sql/run.sh",
+    "test:all": "npm test && npm run test:sql && npm run test:e2e"
+  },
+  "engines": { "node": ">=18" }
+}

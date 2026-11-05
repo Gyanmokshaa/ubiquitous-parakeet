@@ -1,0 +1,4 @@
+node_modules/
+.vercel/
+.env*
+tests/screenshots/*.tmp.png
