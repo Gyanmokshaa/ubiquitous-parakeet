@@ -105,6 +105,7 @@ class SupabaseBackend {
 // শুধু ?demo=1 অথবা টেস্টে ব্যবহৃত হয়। ইমেইল admin@ দিয়ে শুরু হলে অ্যাডমিন।
 // ---------------------------------------------------------------------
 const DEMO_KEY = 'khata_demo_db_v1';
+const DEMO_SESSION = 'khata_demo_session';
 
 function uuid() {
   if (crypto.randomUUID) return crypto.randomUUID();
@@ -115,19 +116,35 @@ export class DemoBackend {
   constructor() {
     this.kind = 'demo';
     this.db = this._load();
+    // প্রতিটি কাজের আগে localStorage থেকে নতুন করে পড়ি, যাতে অন্য ট্যাবের বদল দেখা যায়
+    for (const name of Object.getOwnPropertyNames(DemoBackend.prototype)) {
+      if (name === 'constructor' || name.startsWith('_')) continue;
+      const fn = this[name];
+      this[name] = (...args) => { this.db = this._load(); return fn.apply(this, args); };
+    }
   }
   _load() {
     try {
       const raw = localStorage.getItem(DEMO_KEY);
       if (raw) return JSON.parse(raw);
     } catch (_) { /* খালি দিয়ে শুরু */ }
-    return { users: [], session: null, profiles: [], feedback: [], ...Object.fromEntries(TABLES.map((t) => [t, []])) };
+    return { users: [], profiles: [], feedback: [], ...Object.fromEntries(TABLES.map((t) => [t, []])) };
   }
   _save() {
     try { localStorage.setItem(DEMO_KEY, JSON.stringify(this.db)); } catch (_) { /* ignore */ }
   }
+  // সেশন প্রতি ট্যাবে আলাদা (sessionStorage), ডেটা সব ট্যাবে এক (localStorage)
+  _setSession(id) {
+    this._session = id;
+    try { if (id) sessionStorage.setItem(DEMO_SESSION, id); else sessionStorage.removeItem(DEMO_SESSION); } catch (_) { /* ignore */ }
+  }
   _now() { return window.__KHATA_NOW__ ? new Date(window.__KHATA_NOW__) : new Date(); }
-  _uid() { return this.db.session; }
+  _uid() {
+    if (this._session === undefined) {
+      try { this._session = sessionStorage.getItem(DEMO_SESSION); } catch (_) { this._session = null; }
+    }
+    return this._session;
+  }
   _profile(id = this._uid()) { return this.db.profiles.find((p) => p.id === id) || null; }
   _requireAccess() {
     const p = this._profile();
@@ -155,18 +172,17 @@ export class DemoBackend {
       trial_ends_at: new Date(now.getTime() + TRIAL_DAYS * DAY_MS).toISOString(),
       activated: false, activated_at: null, activated_until: null,
     });
-    this.db.session = id;
     this._save();
+    this._setSession(id);
     return { user: { id, email }, needsConfirm: false };
   }
   async signIn({ email, password }) {
     const u = this.db.users.find((x) => x.email === email.trim().toLowerCase() && x.password === password);
     if (!u) throw new Error('Invalid login credentials');
-    this.db.session = u.id;
-    this._save();
+    this._setSession(u.id);
     return { id: u.id, email: u.email };
   }
-  async signOut() { this.db.session = null; this._save(); }
+  async signOut() { this._setSession(null); }
   async resetPassword() { /* ডেমোতে কিছু হয় না */ }
   async getProfile() { const p = this._profile(); return p ? { ...p } : null; }
   async updateProfile({ business_name, owner_name, phone }) {

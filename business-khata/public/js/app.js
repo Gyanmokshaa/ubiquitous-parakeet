@@ -170,6 +170,9 @@ async function logout() {
   await state.be.signOut();
   state.user = null;
   state.profile = null;
+  state.tab = 'home';
+  state.search = {};
+  TABLES.forEach((t) => { state.data[t] = []; });
   renderAuth();
 }
 

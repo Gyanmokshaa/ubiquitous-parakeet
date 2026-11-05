@@ -38,12 +38,19 @@ async function setNow(page, ms) {
 }
 
 async function fill(page, label, value) {
-  await page.getByLabel(label, { exact: false }).first().fill(String(value));
+  const scope = (await page.locator('.sheet').count()) ? page.locator('.sheet') : page;
+  await scope.getByLabel(label, { exact: false }).first().fill(String(value));
 }
 
 async function submitSheet(page) {
   await page.locator('.sheet button[type=submit]').click();
-  await page.locator('.sheet-backdrop').waitFor({ state: 'detached' });
+  try {
+    await page.locator('.sheet-backdrop').waitFor({ state: 'detached' });
+  } catch (e) {
+    const msg = await page.locator('.sheet .error-msg').innerText().catch(() => '');
+    await page.locator('.sheet [data-cancel]').click().catch(() => {});
+    throw new Error('ফর্ম জমা হয়নি: ' + msg);
+  }
 }
 
 async function runPhone(browser, server, phone) {
@@ -84,7 +91,7 @@ async function runPhone(browser, server, phone) {
   });
 
   await step('স্টকে জিনিস যোগ', async () => {
-    await page.getByRole('button', { name: /স্টক/ }).click();
+    await page.locator('.bottom-nav').getByRole('button', { name: /স্টক/ }).click();
     await page.getByRole('button', { name: /নতুন জিনিস/ }).click();
     await fill(page, 'জিনিসের নাম', 'চাল');
     await fill(page, 'একক', 'কেজি');
@@ -99,7 +106,7 @@ async function runPhone(browser, server, phone) {
   });
 
   await step('খদ্দের যোগ, পাশে কল ও WhatsApp বোতাম', async () => {
-    await page.getByRole('button', { name: /খদ্দের/ }).first().click();
+    await page.locator('.bottom-nav').getByRole('button', { name: /খদ্দের/ }).click();
     await page.getByRole('button', { name: /নতুন খদ্দের/ }).click();
     await fill(page, 'নাম', 'রহিম শেখ');
     await fill(page, 'মোবাইল নম্বর', '৯৮৩০০ ১২৩৪৫');
@@ -127,7 +134,7 @@ async function runPhone(browser, server, phone) {
   });
 
   await step('বিক্রি: স্টক কমে, বাকি দেখায়', async () => {
-    await page.getByRole('button', { name: /বিক্রি/ }).first().click();
+    await page.locator('.bottom-nav').getByRole('button', { name: /বিক্রি/ }).click();
     await page.locator('.fab').click();
     await page.getByLabel('স্টকের জিনিস').selectOption({ label: 'চাল (৫০ কেজি আছে)' });
     await fill(page, 'পরিমাণ', '5');
@@ -137,14 +144,14 @@ async function runPhone(browser, server, phone) {
     await submitSheet(page);
     const card = page.locator('.item', { hasText: 'চাল' }).first();
     assert.match(await card.innerText(), /বাকি ₹১০০/);
-    await page.getByRole('button', { name: /স্টক/ }).click();
+    await page.locator('.bottom-nav').getByRole('button', { name: /স্টক/ }).click();
     assert.match(await page.locator('.item', { hasText: 'চাল' }).innerText(), /৪৫ কেজি/);
-    await page.getByRole('button', { name: /খদ্দের/ }).first().click();
+    await page.locator('.bottom-nav').getByRole('button', { name: /খদ্দের/ }).click();
     assert.match(await page.locator('.item', { hasText: 'রহিম শেখ' }).innerText(), /বাকি ₹১০০/);
   });
 
   await step('খরচ যোগ', async () => {
-    await page.getByRole('button', { name: /খরচ/ }).click();
+    await page.locator('.bottom-nav').getByRole('button', { name: /খরচ/ }).click();
     await page.locator('.fab').click();
     await page.getByLabel('খরচের ধরন').selectOption('ভাড়া');
     await fill(page, 'টাকা', '1500');
@@ -155,7 +162,7 @@ async function runPhone(browser, server, phone) {
   });
 
   await step('বাকি কিস্তি (EMI) যোগ ও শোধ', async () => {
-    await page.getByRole('button', { name: /কিস্তি/ }).click();
+    await page.locator('.bottom-nav').getByRole('button', { name: /কিস্তি/ }).click();
     await page.locator('.fab').click();
     await fill(page, 'কার সঙ্গে', 'স্টেট ব্যাংক লোন');
     await fill(page, 'প্রতি কিস্তির টাকা', '2000');
@@ -173,7 +180,7 @@ async function runPhone(browser, server, phone) {
   });
 
   await step('হোমে হিসাবের সারাংশ', async () => {
-    await page.getByRole('button', { name: /হোম/ }).click();
+    await page.locator('.bottom-nav').getByRole('button', { name: /হোম/ }).click();
     const t = await page.locator('#stats').innerText();
     assert.match(t, /আজকের বিক্রি\s*₹৩০০/);
     assert.match(t, /এই মাসের খরচ\s*₹১,৫০০/);
@@ -193,7 +200,7 @@ async function runPhone(browser, server, phone) {
   });
 
   await step('XSS: খদ্দেরের নামে HTML চলে না', async () => {
-    await page.getByRole('button', { name: /খদ্দের/ }).first().click();
+    await page.locator('.bottom-nav').getByRole('button', { name: /খদ্দের/ }).click();
     await page.getByRole('button', { name: /নতুন খদ্দের/ }).click();
     await fill(page, 'নাম', '<img src=x onerror="window.__pwned=1">');
     await submitSheet(page);
@@ -210,9 +217,9 @@ async function runPhone(browser, server, phone) {
     await fill(page, 'পাসওয়ার্ড', 'secret123');
     await page.getByRole('button', { name: 'অ্যাকাউন্ট খুলুন' }).click();
     await page.locator('#validity').waitFor();
-    await page.getByRole('button', { name: /খদ্দের/ }).first().click();
+    await page.locator('.bottom-nav').getByRole('button', { name: /খদ্দের/ }).click();
     assert.equal(await page.locator('.item').count(), 0);
-    await page.getByRole('button', { name: /স্টক/ }).click();
+    await page.locator('.bottom-nav').getByRole('button', { name: /স্টক/ }).click();
     assert.equal(await page.locator('.item').count(), 0);
     await page.locator('#menuBtn').click();
     await page.getByRole('button', { name: 'লগআউট' }).click();
@@ -279,9 +286,9 @@ async function runPhone(browser, server, phone) {
     await page2.getByRole('button', { name: 'অ্যাক্টিভেট হয়েছে কিনা দেখুন' }).click();
     await page2.locator('#validity').waitFor();
     assert.match(await page2.locator('#validity').innerText(), /অ্যাকাউন্ট সক্রিয়/);
-    await page2.getByRole('button', { name: /খদ্দের/ }).first().click();
+    await page2.locator('.bottom-nav').getByRole('button', { name: /খদ্দের/ }).click();
     await page2.locator('.item', { hasText: 'রহিম শেখ' }).waitFor();
-    await page2.getByRole('button', { name: /স্টক/ }).click();
+    await page2.locator('.bottom-nav').getByRole('button', { name: /স্টক/ }).click();
     assert.match(await page2.locator('.item', { hasText: 'চাল' }).innerText(), /৪৫ কেজি/);
     // অ্যাক্টিভেট অবস্থায় (ফ্রি মেয়াদ শেষ) মতামতের অপশন নেই
     await page2.locator('#menuBtn').click();
