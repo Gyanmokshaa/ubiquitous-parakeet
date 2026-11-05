@@ -134,6 +134,7 @@ function explore(meta) {
     reachedNodes.add(s.node);
     s.know.forEach(k => learned.add(k));
     const n = S.nodes[s.node];
+    (n.text || []).forEach((p, i) => { if (typeof p === 'object' && evalCond(p.if, s, meta)) shownParas.add(s.node + '#' + i); });
     if (n.ending) {
       if (!endings.has(n.ending) || endings.get(n.ending) > d) endings.set(n.ending, d);
       continue;
@@ -149,6 +150,7 @@ function explore(meta) {
   return { reachedNodes, endings, learned, deadEnds, states: count };
 }
 
+const shownParas = new Set();
 // first night: nothing known
 const first = explore({ know: new Set(), seen: new Set(), runs: 0 });
 // later nights: accumulate knowledge until fixpoint
@@ -163,6 +165,9 @@ for (let i = 0; i < 10; i++) {
 }
 
 for (const d of [...first.deadEnds, ...later.deadEnds]) errors.push('dead end state: ' + d);
+for (const id of ids) (S.nodes[id].text || []).forEach((p, i) => {
+  if (typeof p === 'object' && !shownParas.has(id + '#' + i)) errors.push(`${id}: conditional paragraph ${i} can never be shown`);
+});
 const unreachable = ids.filter(id => !first.reachedNodes.has(id) && !later.reachedNodes.has(id));
 for (const id of unreachable) errors.push('unreachable node: ' + id);
 for (const e of Object.keys(S.endings)) if (!first.endings.has(e) && !later.endings.has(e)) errors.push('unreachable ending: ' + e);
