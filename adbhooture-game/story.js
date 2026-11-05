@@ -104,7 +104,7 @@ window.STORY = {
     },
 
     n_haru2: {
-      scene: 'lane', time: 'রাত ১২টা বাজতে দুই', dark: true,
+      fear: -1, scene: 'lane', time: 'রাত ১২টা বাজতে দুই', dark: true,
       text: [
         'হারু কাগজে মুড়ে মোমবাতি দিল, সঙ্গে একটা ভিজে-ভিজে দেশলাইয়ের বাক্স। পয়সা নিতে গিয়ে তোমার হাতটা হঠাৎ চেপে ধরল।',
         '- বাবু, একটা কথা রাখবেন? আজ রাতে কেউ যদি নাম ধরে ডাকে, সাড়া দেবেন না। যার গলাই হোক।',
@@ -130,7 +130,7 @@ window.STORY = {
     },
 
     n_lane_dark: {
-      scene: 'lane', time: 'রাত ১২টা বাজতে দুই', dark: true, fear: 2, sfx: 'dog',
+      scene: 'lane', time: 'রাত ১২টা বাজতে দুই', dark: true, fear: 1, sfx: 'dog',
       text: [
         'গলিটা এত সরু যে দু’হাত ছড়ালে দু’দিকের দেয়াল ছোঁয়া যায়। তুমি ভিজে দেয়ালে হাত রেখে রেখে এগোচ্ছ। শ্যাওলা, খসে পড়া চুন, কারও বাড়ির বন্ধ খড়খড়ি।',
         'দূরে একটা কুকুর ডেকে উঠল, লম্বা টানা কান্নার মতো। তারপর হঠাৎ থেমে গেল, যেন কেউ মুখ চেপে ধরেছে।',
@@ -281,7 +281,7 @@ window.STORY = {
     },
 
     n_phone1_who: {
-      scene: 'phone', time: 'রাত ১২টা ৩', dark: true, fear: 2, set: ['callerBelow'],
+      scene: 'phone', time: 'রাত ১২টা ৩', dark: true, fear: 1, set: ['callerBelow'],
       text: [
         'ওপারে কয়েক মুহূর্তের নীরবতা। তারপর:',
         '- আমি নিচের ঘর থেকে বলছি।',
@@ -295,7 +295,7 @@ window.STORY = {
     },
 
     n_phone_ignore: {
-      scene: 'door', time: 'রাত ১২টা ৫', dark: true, fear: 2, sfx: 'ring',
+      scene: 'door', time: 'রাত ১২টা ৫', dark: true, fear: 1, sfx: 'ring',
       text: [
         'ফোনটা বাজতেই থাকল। তুমি গুনলে। এগারো। বারো। তেরো।',
         'তারপর থামল। নীরবতাটা বাজনার চেয়েও জোরালো।',
@@ -351,7 +351,7 @@ window.STORY = {
     /* ================= দ্বিতীয় অঙ্ক: খোঁজ ================= */
 
     n_hub: {
-      scene: 'room', time: 'রাত সাড়ে ১২টা', dark: true,
+      fear: -1, scene: 'room', time: 'রাত সাড়ে ১২টা', dark: true,
       text: [
         {if: {noflag: ['searchedRoom', 'wentDown', 'wentOut']}, t: 'ঘরে ফিরে খিল তুলে দিলে। বুকের ভেতর এখনও ঢিপঢিপ। বাইরে বৃষ্টি আবার শুরু হয়েছে, টিনের চালে তার একঘেয়ে শব্দ।'},
         {if: {flag: 'knowsTime', noflag: ['searchedRoom', 'wentDown', 'wentOut']}, t: 'তিনটে সতেরো। এখনও অনেক সময়। আবার খুব কম।'},
@@ -384,7 +384,7 @@ window.STORY = {
     },
 
     n_mirror: {
-      scene: 'mirror', time: 'রাত ১২টা ৪৫', dark: true, fear: 2, set: ['knowsMinu'],
+      scene: 'mirror', time: 'রাত ১২টা ৪৫', dark: true, fear: 1, set: ['knowsMinu'],
       text: [
         'আয়নাটা মোমের সামনে তুলে ধরলে। পারা-ওঠা কাচে তোমার মুখ টুকরো টুকরো, যেন ভাঙা জলে।',
         'কিন্তু তোমার পিছনে ঘরটা অন্যরকম। দেয়ালে নতুন চুনকাম, জানলায় ফুলছাপ পর্দা। টেবিলে ঝুঁকে বসে একটা মেয়ে, বিনুনি করা চুল, খাতায় কিছু লিখছে।',
@@ -426,7 +426,7 @@ window.STORY = {
     },
 
     n_letters: {
-      scene: 'diary', time: 'রাত ১২টা ৫০', dark: true, set: ['readLetters'], fear: 2,
+      scene: 'diary', time: 'রাত ১২টা ৫০', dark: true, set: ['readLetters'], fear: 1,
       text: [
         '‘শ্রীচরণেষু মা, কলকাতায় ভালোই আছি। বাড়িউলি দিদিমা খুব যত্ন করেন, যদিও মুখ দেখিনি কখনও।’',
         '‘মা, এ বাড়ির সবাই আমার নাম জানতে চায়। দিদিমা রোজ জিজ্ঞেস করেন। আমি বলিনি। কেন বলিনি জানি না।’',
@@ -469,7 +469,7 @@ window.STORY = {
     },
 
     n_trunk: {
-      scene: 'net', time: 'রাত ১টা ২০', dark: true, fear: 2, learn: ['didima'], set: ['sawTrunk'],
+      scene: 'net', time: 'রাত ১টা ২০', dark: true, fear: 1, learn: ['didima'], set: ['sawTrunk'],
       text: [
         'দিদিমার ঘরের কোণে টিনের তোরঙ্গ, গায়ে ফুলের নকশা ফিকে হয়ে এসেছে। চাবিটা ঘোরাতেই খুট করে খুলে গেল, যেন এতদিন এরই অপেক্ষায় ছিল।',
         'ভেতরে ভাঁজ করা একটা থান। তার নিচে পুরসভার একটা হলদে কাগজ, মৃত্যু-নিবন্ধনের। নাম: হেমনলিনী দেবী। মৃত্যুর তারিখ: শ্রাবণ, তেরোশো তিয়াত্তর।',
@@ -497,7 +497,7 @@ window.STORY = {
     },
 
     n_net: {
-      scene: 'net', time: 'রাত ১টা ২০', dark: true, fear: 2, set: ['sawNet'], learn: ['empty'],
+      scene: 'net', time: 'রাত ১টা ২০', dark: true, fear: 1, set: ['sawNet'], learn: ['empty'],
       text: [
         'তুমি মশারির এক কোণ তুলে ধরলে। মোমের আলো ভেতরে গড়িয়ে পড়ল।',
         'বিছানায় কেউ নেই। দুটো পাশবালিশ সাজানো, মানুষের মতো করে, তার ওপর একটা সাদা থান। মাথার কাছে একজোড়া গোল চশমা, কাচে পুরু ধুলো। বালিশে চুলের তেলের পুরনো দাগ, বহু বছরের।',
@@ -512,7 +512,7 @@ window.STORY = {
     },
 
     n_didima_face: {
-      scene: 'door', time: 'রাত ১টা ২২', dark: true, fear: 2, set: ['sawDidima'], panic: true,
+      scene: 'door', time: 'রাত ১টা ২২', dark: true, fear: 1, set: ['sawDidima'], panic: true,
       text: [
         'দরজায় দাঁড়িয়ে আছেন দিদিমা। সাদা থান, ঝুঁকে পড়া পিঠ। মোমের আলো তাঁর পা পর্যন্ত পৌঁছয়, কোমর পর্যন্ত, তারপর আর ওঠে না। আলোটা যেন তাঁর মুখের কাছে গিয়ে বেঁকে সরে যায়।',
         {if: {flag: 'toldName'}, t: '- বোসো, চা করি। তুমি তো এখন আমার ঘরের লোক।'},
@@ -629,7 +629,7 @@ window.STORY = {
     },
 
     n_hall: {
-      scene: 'screen', time: 'রাত ২টো ২০', dark: true, fear: 2, panic: true,
+      scene: 'screen', time: 'রাত ২টো ২০', dark: true, fear: 1, panic: true,
       text: [
         'সারি সারি খালি চেয়ার, অনেকগুলোর গদি ছেঁড়া। সামনে বিশাল পর্দা, আর তাতে ছবি চলছে। সাদা-কালো, দানা-দানা।',
         'পর্দায় একটা সরু গলি। ভিজে রোয়াক। একটা তিনতলা বাড়ি, সবুজ খড়খড়ি। ক্যামেরা ধীরে ধীরে উঠছে তিনতলার জানলায়।',
@@ -771,7 +771,7 @@ window.STORY = {
     },
 
     n_317: {
-      scene: 'door', time: 'রাত ৩টে ১৭', dark: true, sfx: 'knock', fear: 2, panic: true,
+      scene: 'door', time: 'রাত ৩টে ১৭', dark: true, sfx: 'knock', fear: 1, panic: true,
       text: [
         'পাশের বাড়ির ঘড়িতে কোনো ঘণ্টা পড়ল না। তবু তুমি জানলে, সময় হয়েছে।',
         'ঠক। ঠক। ঠক।',
@@ -789,7 +789,7 @@ window.STORY = {
     },
 
     n_ask_who: {
-      scene: 'door', time: 'রাত ৩টে ১৮', dark: true, fear: 2, panic: true,
+      scene: 'door', time: 'রাত ৩টে ১৮', dark: true, fear: 1, panic: true,
       text: [
         'দরজার ওপাশটা এক মুহূর্ত চুপ। তারপর গলাটা হাসল। একসঙ্গে অনেকগুলো গলায়।',
         '- আমি? আমি তো সবাই। দিদিমা, অনিমেষ, মিনু। আরও অনেকে, যাদের নাম তুমি জানো না।',
@@ -830,7 +830,7 @@ window.STORY = {
     },
 
     n_silence: {
-      scene: 'door', time: 'রাত ৩টে ৪০', dark: true, fear: 2, panic: true, set: ['keptSilent'],
+      scene: 'door', time: 'রাত ৩টে ৪০', dark: true, fear: 1, panic: true, set: ['keptSilent'],
       text: [
         'তুমি চুপ করে রইলে। দরজার ওপাশে গলাগুলো পাল্টাতে থাকল।',
         'মায়ের গলা। হারুর গলা: প্রুফবাবু, ও প্রুফবাবু! প্রেসের ম্যানেজারের গলা। ছোটবেলার এক বন্ধুর গলা, যে বহু বছর আগে পুকুরে ডুবে গিয়েছিল।',
@@ -845,7 +845,7 @@ window.STORY = {
     },
 
     n_window: {
-      scene: 'window', time: 'রাত ৪টে', dark: true, fear: 3, panic: true, learn: ['empty'],
+      scene: 'window', time: 'রাত ৪টে', dark: true, fear: 2, panic: true, learn: ['empty'],
       text: [
         'জানলার শিক ধরে নিচে তাকালে।',
         'উঠোনের জমা জলের মাঝখানে দাঁড়িয়ে আছেন দিদিমা। সাদা থান। মাথা তুলে সোজা তোমার জানলার দিকে তাকিয়ে আছেন।',
