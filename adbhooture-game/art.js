@@ -172,7 +172,7 @@
       '<rect x="40" y="60" width="320" height="170" fill="' + INK + '"/>' +
       '<path d="M40 60 L200 26 L360 60" fill="' + INK2 + '"/>' +
       '<rect x="80" y="70" width="240" height="34" fill="' + INK3 + '"/>' +
-      '<text x="200" y="95" font-family="Galada,serif" font-size="22" fill="' + CREAM + '" opacity=".35" text-anchor="middle">ছায়াবাণী</text>' +
+      '<text x="200" y="95" font-family="Galada,serif" font-size="22" fill="' + CREAM + '" opacity=".35" text-anchor="middle">রূপছায়া</text>' +
       '<path d="M200 70 l6 10 -8 6 4 18" stroke="' + INK + '" stroke-width="2" fill="none"/>' +
       '<rect x="70" y="120" width="44" height="64" fill="' + SEP + '" opacity=".4" transform="rotate(-3 92 152)"/><path d="M70 160 l44 -10 0 30z" fill="' + INK + '"/>' +
       '<rect x="290" y="118" width="40" height="60" fill="#8e1b1b" opacity=".3" transform="rotate(4 310 148)"/>' +
