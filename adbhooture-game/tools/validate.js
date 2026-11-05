@@ -78,11 +78,20 @@ for (const [id, t] of allText) {
 }
 
 // ---- dynamic exploration ----
+// Flags that no condition ever reads cannot change any outcome, so they are left out of the state.
+const usedFlags = new Set();
+const noteCond = c => { if (c) [...arr(c.flag), ...arr(c.noflag)].forEach(f => usedFlags.add(f)); };
+for (const id of ids) {
+  const n = S.nodes[id];
+  (n.text || []).forEach(p => typeof p === 'object' && noteCond(p.if));
+  (n.choices || []).forEach(ch => noteCond(ch.if));
+}
+const addFlag = (set, f) => { if (usedFlags.has(f)) set.add(f); };
 function enter(st, id) {
   const n = S.nodes[id];
   const s = { node: id, flags: new Set(st.flags), items: new Set(st.items), fear: st.fear, know: new Set(st.know) };
   s.fear = Math.max(0, Math.min(S.maxFear, s.fear + (n.fear || 0)));
-  arr(n.set).forEach(f => s.flags.add(f));
+  arr(n.set).forEach(f => addFlag(s.flags, f));
   arr(n.unset).forEach(f => s.flags.delete(f));
   arr(n.give).forEach(f => s.items.add(f));
   arr(n.take).forEach(f => s.items.delete(f));
@@ -93,26 +102,35 @@ function enter(st, id) {
 function applyChoice(st, ch) {
   const s = { node: st.node, flags: new Set(st.flags), items: new Set(st.items), fear: st.fear, know: new Set(st.know) };
   s.fear = Math.max(0, Math.min(S.maxFear, s.fear + (ch.fear || 0)));
-  arr(ch.set).forEach(f => s.flags.add(f));
+  arr(ch.set).forEach(f => addFlag(s.flags, f));
   arr(ch.unset).forEach(f => s.flags.delete(f));
   arr(ch.give).forEach(f => s.items.add(f));
   arr(ch.take).forEach(f => s.items.delete(f));
   return enter(s, ch.to);
 }
-const key = s => [s.node, [...s.flags].sort().join(','), [...s.items].sort().join(','), s.fear, [...s.know].sort().join(',')].join('|');
+// Fear only matters through `panic`, and the rules are monotone in fear, so for each
+// (node, flags, items, knowledge) it is enough to explore the lowest and highest fear seen.
+const key = s => [s.node, [...s.flags].sort().join(','), [...s.items].sort().join(','), [...s.know].sort().join(',')].join('|');
 
 function explore(meta) {
   const start = enter({ flags: new Set(), items: new Set(), fear: 0, know: new Set(meta.know) }, S.start);
-  const seenStates = new Map([[key(start), start]]);
-  const queue = [start];
+  const range = new Map([[key(start), [start.fear, start.fear]]]);
+  let count = 1;
+  const visit = t => {
+    const k = key(t), r = range.get(k);
+    if (!r) { range.set(k, [t.fear, t.fear]); return true; }
+    if (t.fear < r[0]) { r[0] = t.fear; return true; }
+    if (t.fear > r[1]) { r[1] = t.fear; return true; }
+    return false;
+  };
+  const queue = [[start, 1]];
   const reachedNodes = new Set();
   const endings = new Map(); // ending -> shortest depth
   const learned = new Set(meta.know);
   const deadEnds = [];
-  const depth = new Map([[key(start), 1]]);
-  while (queue.length) {
-    const s = queue.shift();
-    const d = depth.get(key(s));
+  let qi = 0;
+  while (qi < queue.length) {
+    const [s, d] = queue[qi++];
     reachedNodes.add(s.node);
     s.know.forEach(k => learned.add(k));
     const n = S.nodes[s.node];
@@ -124,11 +142,11 @@ function explore(meta) {
     if (!avail.length) { deadEnds.push(key(s)); continue; }
     for (const ch of avail) {
       const t = applyChoice(s, ch);
-      const k = key(t);
-      if (!seenStates.has(k)) { seenStates.set(k, t); depth.set(k, d + 1); queue.push(t); }
+      if (visit(t)) { count++; queue.push([t, d + 1]); }
     }
+    if (qi > 4096) { queue.splice(0, qi); qi = 0; }
   }
-  return { reachedNodes, endings, learned, deadEnds, states: seenStates.size };
+  return { reachedNodes, endings, learned, deadEnds, states: count };
 }
 
 // first night: nothing known
