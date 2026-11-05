@@ -181,7 +181,7 @@
       var ws = s.querySelectorAll('.w');
       for (var i = 0; i < ws.length; i++) (function (w, at) { later(function () { w.classList.add('on'); }, at); })(ws[i], t + 200 + i * 38);
       t += 200 + ws.length * 38 + 420;
-      if (si === 1) later(function () { if (strips.length > 2) s.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }, t - 400);
+      if (si >= 1) later(function () { s.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }, t - 400);
     });
     later(done, t);
     if (state.fear >= MAXF * 0.5) later(shimmerSome, t + 1800);
