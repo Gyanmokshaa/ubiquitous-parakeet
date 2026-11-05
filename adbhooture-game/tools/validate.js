@@ -140,6 +140,7 @@ function explore(meta) {
       continue;
     }
     const avail = (n.choices || []).filter(ch => evalCond(ch.if, s, meta) && S.nodes[ch.to]);
+    (n.choices || []).forEach((ch, i) => { if (avail.includes(ch)) shownChoices.add(s.node + '>' + i); });
     if (!avail.length) { deadEnds.push(key(s)); continue; }
     for (const ch of avail) {
       const t = applyChoice(s, ch);
@@ -151,6 +152,7 @@ function explore(meta) {
 }
 
 const shownParas = new Set();
+const shownChoices = new Set();
 // first night: nothing known
 const first = explore({ know: new Set(), seen: new Set(), runs: 0 });
 // later nights: accumulate knowledge until fixpoint
@@ -167,6 +169,9 @@ for (let i = 0; i < 10; i++) {
 for (const d of [...first.deadEnds, ...later.deadEnds]) errors.push('dead end state: ' + d);
 for (const id of ids) (S.nodes[id].text || []).forEach((p, i) => {
   if (typeof p === 'object' && !shownParas.has(id + '#' + i)) errors.push(`${id}: conditional paragraph ${i} can never be shown`);
+});
+for (const id of ids) (S.nodes[id].choices || []).forEach((ch, i) => {
+  if (!shownChoices.has(id + '>' + i)) errors.push(`${id}: choice "${ch.t}" can never be offered`);
 });
 const unreachable = ids.filter(id => !first.reachedNodes.has(id) && !later.reachedNodes.has(id));
 for (const id of unreachable) errors.push('unreachable node: ' + id);
@@ -191,4 +196,4 @@ if (errors.length) {
   for (const e of errors) console.log('  ✗', e);
   process.exit(1);
 }
-console.log('\n✓ কোনো ভাঙা লিংক নেই, কোনো কানাগলি নেই, সব নোড ও সব সমাপ্তিতে পৌঁছনো যায়।');
+console.log('\n✓ কোনো ভাঙা লিংক নেই, কোনো কানাগলি নেই, সব নোড ও সব সমাপ্তিতে পৌঁছনো যায়, প্রতিটা শর্তসাপেক্ষ অনুচ্ছেদ ও পছন্দ অন্তত একবার দেখা যায়।');
