@@ -183,7 +183,10 @@
   };
   S.projector = function () {
     return svg('<rect width="400" height="240" fill="' + INK + '"/>' +
-      '<path d="M140 100 L400 40 L400 200Z" fill="' + CREAM + '" opacity=".07" class="flk"/>' +
+      '<path d="M192 137 L400 30 L400 230Z" fill="' + CREAM + '" opacity=".05"/>' +
+      '<path d="M192 137 L400 60 L400 200Z" fill="' + CREAM + '" opacity=".06"/>' +
+      '<path d="M192 137 L400 95 L400 170Z" fill="' + CREAM + '" opacity=".08"/>' +
+      '<g fill="' + CREAM + '" opacity=".35"><circle cx="260" cy="120" r="1"/><circle cx="300" cy="150" r="1.2"/><circle cx="335" cy="105" r=".9"/><circle cx="370" cy="160" r="1.1"/><circle cx="230" cy="140" r=".8"/></g>' +
       '<rect x="60" y="110" width="110" height="60" rx="6" fill="' + INK3 + '"/>' +
       '<circle cx="80" cy="84" r="30" fill="none" stroke="' + SEP + '" stroke-width="5"/><circle cx="80" cy="84" r="6" fill="' + SEP + '"/>' +
       '<circle cx="150" cy="84" r="30" fill="none" stroke="' + SEP + '" stroke-width="5"/><circle cx="150" cy="84" r="6" fill="' + SEP + '"/>' +

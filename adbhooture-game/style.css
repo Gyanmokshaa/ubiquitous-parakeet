@@ -25,8 +25,9 @@ button{font-family:inherit;color:inherit}
 #fx-vignette{background:radial-gradient(ellipse at 50% 45%,transparent calc(62% - var(--fear)*28%),rgba(0,0,0,calc(.45 + var(--fear)*.45)) 100%)}
 #fx-candle{opacity:0;transition:opacity 1.2s;
   background:radial-gradient(ellipse at 50% 85%,rgba(242,166,64,.16) 0%,rgba(120,60,10,.08) 35%,rgba(0,0,0,.55) 80%)}
-#app.dark #fx-candle{opacity:1;animation:flicker 3.1s infinite steps(1,end)}
-@keyframes flicker{0%{opacity:1}12%{opacity:.82}14%{opacity:1}37%{opacity:.9}40%{opacity:.7}42%{opacity:.95}63%{opacity:1}71%{opacity:.86}73%{opacity:1}88%{opacity:.78}90%{opacity:1}}
+#app.dark #fx-candle{opacity:1;animation:candleflick 3.1s infinite steps(1,end)}
+@keyframes candleflick{0%{opacity:1}12%{opacity:.82}14%{opacity:1}37%{opacity:.9}40%{opacity:.7}42%{opacity:.95}63%{opacity:1}71%{opacity:.86}73%{opacity:1}88%{opacity:.78}90%{opacity:1}}
+@keyframes flicker{0%{fill-opacity:1;stroke-opacity:1}12%{fill-opacity:.72;stroke-opacity:.72}14%{fill-opacity:1;stroke-opacity:1}37%{fill-opacity:.85;stroke-opacity:.85}40%{fill-opacity:.6;stroke-opacity:.6}42%{fill-opacity:.95;stroke-opacity:.95}63%{fill-opacity:1;stroke-opacity:1}71%{fill-opacity:.8;stroke-opacity:.8}73%{fill-opacity:1;stroke-opacity:1}88%{fill-opacity:.7;stroke-opacity:.7}90%{fill-opacity:1;stroke-opacity:1}}
 #fx-grain{opacity:calc(var(--fear)*.22);mix-blend-mode:overlay;
   background-image:repeating-radial-gradient(circle at 17% 32%,rgba(255,255,255,.18) 0 1px,transparent 1px 3px),repeating-radial-gradient(circle at 71% 64%,rgba(0,0,0,.35) 0 1px,transparent 1px 4px);
   animation:grain .5s steps(3) infinite}
