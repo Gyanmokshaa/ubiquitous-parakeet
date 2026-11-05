@@ -67,12 +67,20 @@ footer{text-align:center;color:var(--mut);font-size:13px;margin-top:30px}footer 
 <button id="bk3">আরেকটি নাম দেখুন</button></section>
 <footer>by <a href="https://gyanmokshaa.com" target="_blank" rel="noopener">Gyanmokshaa LLP</a></footer>
 </main>
-<script src="/names.js"></script>
+<script src="/animals.js"></script>
 <script>
 const $=i=>document.getElementById(i),show=i=>{document.querySelectorAll('.s').forEach(e=>e.classList.toggle('on',e.id===i));scrollTo(0,0)};
 const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 const norm=s=>s.trim().split(/\s+/)[0].toLowerCase();
-const find=q=>{q=norm(q);return NAMES.find(x=>x.n===q||x.e.includes(q))};
+// names/<first letter>.json is loaded only when needed; names/index.json maps English spellings to letters
+const cache={};let idxP=null;
+const load=f=>cache[f]||(cache[f]=fetch(`/names/${encodeURIComponent(f)}.json`).then(r=>{if(!r.ok)throw 0;return r.json()}).catch(e=>{delete cache[f];throw e}));
+const index=()=>idxP||(idxP=fetch('/names/index.json').then(r=>{if(!r.ok)throw 0;return r.json()}).catch(e=>{idxP=null;throw e}));
+async function find(q){q=norm(q);if(!q)return null;
+  if(/^[\u0980-\u09FF]/.test(q)){const L=[...q][0];let a;try{a=await load(L)}catch(e){if(e===0)return null;throw e}return a.find(x=>x.n===q)||null}
+  const ix=await index();
+  for(const L in ix)if(ix[L].split(' ').includes(q)){const d=(await load(L)).find(x=>x.e.includes(q));if(d)return d}
+  return null}
 let cur=null,typed='',design=Math.floor(Math.random()*3);
 
 // ---------- canvas helpers ----------
@@ -177,7 +185,10 @@ function open(d){cur=d;design=Math.floor(Math.random()*3);
   if(store.get('nk_reg')){preview().then(()=>show('s3'));return}
   $('tz').innerHTML='';const b=document.createElement('b');b.textContent=d.n;const p=document.createElement('p');p.textContent=d.m;const l=document.createElement('div');l.className='lock';l.textContent='নামের ভাঙন, প্রাণী আর পুরো কার্ড দেখতে নিচের ঘরগুলো ভরুন';$('tz').append(b,p,l);
   $('rn').value=$('nm').value.trim();show('s2')}
-$('f1').onsubmit=e=>{e.preventDefault();typed=$('nm').value.trim();if(!typed)return;const d=find(typed);
+$('f1').onsubmit=async e=>{e.preventDefault();typed=$('nm').value.trim();if(!typed)return;
+  const btn=$('f1').querySelector('button');let d;btn.disabled=true;
+  try{d=await find(typed)}catch(x){btn.disabled=false;alert('এখন খোঁজা গেল না। ইন্টারনেট দেখে আবার চেষ্টা করুন।');return}
+  btn.disabled=false;
   if(d)return open(d);
   cur=null;if(store.get('nk_reg')){fetch('/api/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({unknownOnly:1,cardName:typed})}).catch(()=>{});$('unk').textContent=`“${typed}” নামটি আমাদের খাতায় এখনও ওঠেনি। যাচাই করে যোগ করা হবে, তখন আবার দেখবেন।`;show('s4');return}
   $('tz').innerHTML='';const p=document.createElement('p');p.textContent=`“${typed}” নামটি আমাদের খাতায় এখনও ওঠেনি। আন্দাজে ভুল অর্থ না দিয়ে আমরা যাচাই করে যোগ করি। নম্বর দিয়ে রাখুন, যোগ হলে WhatsApp-এ জানাব।`;$('tz').append(p);$('rn').value=typed;show('s2')};
