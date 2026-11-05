@@ -71,15 +71,17 @@ footer{text-align:center;color:var(--mut);font-size:13px;margin-top:30px}footer 
 <script>
 const $=i=>document.getElementById(i),show=i=>{document.querySelectorAll('.s').forEach(e=>e.classList.toggle('on',e.id===i));scrollTo(0,0)};
 const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
-const norm=s=>s.trim().split(/\s+/)[0].toLowerCase();
+const norm=s=>s.trim().split(/\s+/).join(' ').toLowerCase();
 // names/<first letter>.json is loaded only when needed; names/index.json maps English spellings to letters
 const cache={};let idxP=null;
 const load=f=>cache[f]||(cache[f]=fetch(`/names/${encodeURIComponent(f)}.json`).then(r=>{if(!r.ok)throw 0;return r.json()}).catch(e=>{delete cache[f];throw e}));
 const index=()=>idxP||(idxP=fetch('/names/index.json').then(r=>{if(!r.ok)throw 0;return r.json()}).catch(e=>{idxP=null;throw e}));
-async function find(q){q=norm(q);if(!q)return null;
-  if(/^[\u0980-\u09FF]/.test(q)){const L=[...q][0];let a;try{a=await load(L)}catch(e){if(e===0)return null;throw e}return a.find(x=>x.n===q)||null}
+// try the full typed name first, then only its first word
+async function find(t){const q=norm(t);if(!q)return null;const d=await find1(q);if(d)return d;const w=q.split(' ')[0];return w!==q?find1(w):null}
+async function find1(q){
+  if(/^[\u0980-\u09FF]/.test(q)){const L=[...q][0];let a;try{a=await load(L)}catch(e){if(e===0)return null;throw e}return a.find(x=>norm(x.n)===q)||null}
   const ix=await index();
-  for(const L in ix)if(ix[L].split(' ').includes(q)){const d=(await load(L)).find(x=>x.e.includes(q));if(d)return d}
+  for(const L in ix)if(ix[L].split('|').includes(q)){const d=(await load(L)).find(x=>x.e.some(e=>norm(e)===q));if(d)return d}
   return null}
 let cur=null,typed='',design=Math.floor(Math.random()*3);
 
