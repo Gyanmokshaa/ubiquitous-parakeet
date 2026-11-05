@@ -95,6 +95,7 @@
   }, true);
 
   /* ---------- story flow ---------- */
+  var clockT = null;
   var revealToken = 0, revealing = false, finishReveal = null, curScene = null;
 
   function enter(id, depth) {
@@ -116,6 +117,15 @@
 
   function renderHud(n) {
     $('hud-clock').textContent = n.time || '';
+    // At high fear the clock sometimes shows the hour it is waiting for, for a blink.
+    clearTimeout(clockT);
+    if (n.time && !n.ending && (state.fear || 0) >= 6 && n.time.indexOf('৩টে ১৭') < 0) {
+      clockT = setTimeout(function () {
+        var c = $('hud-clock'), real = c.textContent;
+        c.textContent = 'রাত ৩টে ১৭'; c.classList.add('clock-glitch');
+        setTimeout(function () { if (c.textContent === 'রাত ৩টে ১৭') c.textContent = real; c.classList.remove('clock-glitch'); }, 450);
+      }, 4000 + Math.random() * 6000);
+    }
     var f = '', lit = Math.round(state.fear * 10 / MAXF);
     for (var i = 0; i < 10; i++) f += '<i class="' + (i < lit ? 'on' : '') + '"></i>';
     $('hud-fear').innerHTML = f;

@@ -152,3 +152,6 @@ button{font-family:inherit;color:inherit}
 @keyframes ghost{0%,100%{opacity:.08}50%{opacity:.35}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.strip,.choices .btn,.strip .w{opacity:1!important;transform:none!important}}
 @media (min-width:700px){body{font-size:19px}}
+
+/* the clock blinks to 3:17 at high fear */
+.clock-glitch { color: #e0a39a !important; text-shadow: 1px 0 rgba(200,40,40,.6), -1px 0 rgba(80,160,255,.4); }
