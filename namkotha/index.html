@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="bn"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>নামকথা</title>
+<meta name="description" content="আপনার নামের ভেতরের গল্প, সুন্দর কার্ডে। by Gyanmokshaa">
+<meta name="theme-color" content="#161D47">
+<link rel="manifest" href="/manifest.json"><link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Galada&family=Hind+Siliguri:wght@400;700&family=Noto+Serif+Bengali:wght@400;700&family=Tiro+Bangla&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#F7EFD9;--gold:#E5C877;--mut:#CFD3EA;--line:rgba(229,200,119,.45)}
+*{box-sizing:border-box;margin:0}
+html{background:#0B0F2B}
+body{min-height:100vh;background:radial-gradient(circle at 50% 0,#2C3A73 0,#161D47 45%,#0B0F2B 100%) fixed;color:var(--ink);font:400 17px/1.55 'Hind Siliguri',sans-serif;padding:24px 16px 48px}
+main{max-width:460px;margin:0 auto}
+h1{font:400 64px/1.25 'Tiro Bangla',serif;text-align:center;color:#FBF3DC}
+.sub{text-align:center;color:var(--mut);margin-bottom:26px}
+.s{display:none}.s.on{display:block}
+label{display:block;margin:14px 0 6px;color:var(--mut);font-size:15px}
+input[type=text],input[type=tel]{width:100%;padding:14px;border-radius:12px;border:1.5px solid var(--line);background:rgba(255,255,255,.06);color:#fff;font:inherit;font-size:18px}
+input:focus{outline:2px solid var(--gold);outline-offset:1px}
+button{width:100%;padding:14px;border-radius:12px;border:0;background:var(--gold);color:#161D47;font:700 18px 'Hind Siliguri',sans-serif;cursor:pointer;margin-top:14px}
+button.alt{background:transparent;color:var(--gold);border:1.5px solid var(--line)}
+button:disabled{opacity:.6}
+.teaser{border:1.5px solid var(--line);border-radius:16px;padding:18px;text-align:center;margin-bottom:8px}
+.teaser b{display:block;font:400 44px/1.3 'Tiro Bangla',serif}
+.teaser p{font-size:19px}
+.lock{color:var(--gold);font-size:15px;margin-top:6px}
+.radio{display:flex;gap:18px}.radio label{display:flex;gap:6px;align-items:center;margin:0;color:var(--ink);font-size:17px}
+.check{display:flex;gap:10px;align-items:flex-start;margin-top:16px;font-size:14px;line-height:1.5;color:var(--mut)}.check input{margin-top:4px;width:18px;height:18px;flex:none}
+.err{color:#FFB4A2;margin-top:10px;font-size:15px;min-height:1em}
+canvas{width:100%;height:auto;border-radius:12px;display:block;box-shadow:0 8px 30px rgba(0,0,0,.4)}
+.row{display:flex;gap:10px}.row button{font-size:15px;padding:12px 8px}
+.promo{margin-top:22px;border-top:1px solid var(--line);padding-top:16px;text-align:center;color:var(--mut);font-size:15px}
+.promo a{color:var(--gold)}
+footer{text-align:center;color:var(--mut);font-size:13px;margin-top:30px}footer a{color:var(--gold)}
+</style></head><body><main>
+<h1>নামকথা</h1><p class="sub">আপনার নামের ভেতরের গল্প</p>
+<section class="s on" id="s1"><form id="f1">
+<label for="nm">আপনার নাম লিখুন, বাংলা বা ইংরেজিতে</label>
+<input id="nm" type="text" maxlength="40" autocomplete="given-name" placeholder="যেমন: সুচন্দ্রা" required>
+<button>নামের মানে দেখুন</button></form></section>
+
+<section class="s" id="s2">
+<div class="teaser" id="tz"></div>
+<form id="f2">
+<label for="rn">আপনার নাম</label><input id="rn" type="text" maxlength="60" required>
+<label for="ph">WhatsApp নম্বর</label><input id="ph" type="tel" inputmode="numeric" maxlength="16" placeholder="10 সংখ্যার নম্বর" required>
+<label>আপনার কি নিজের ব্যবসা আছে?</label>
+<div class="radio"><label><input type="radio" name="biz" value="yes" required> হ্যাঁ</label><label><input type="radio" name="biz" value="no"> না</label></div>
+<div id="bzw" hidden><label for="bz">ব্যবসার নাম</label><input id="bz" type="text" maxlength="80"></div>
+<div class="check"><input type="checkbox" id="ok" required><label for="ok" style="margin:0">আমার বয়স ১৮ বা তার বেশি। Gyanmokshaa আমার দেওয়া তথ্য রাখতে পারে এবং WhatsApp-এ কোর্স ও সার্ভিসের খবর পাঠাতে পারে। চাইলে যেকোনো সময় না বলে দিতে পারব।</label></div>
+<div class="err" id="er"></div>
+<button id="go">পুরো কার্ড পান</button></form>
+<button class="alt" id="bk1" type="button">অন্য নাম লিখব</button></section>
+
+<section class="s" id="s3">
+<canvas id="cv" width="1080" height="1350" aria-label="নামের কার্ড"></canvas>
+<button id="other">অন্য ডিজাইনে দেখুন</button>
+<div class="row"><button class="alt" id="dlP">পোস্টের মাপে নামান</button><button class="alt" id="dlS">স্ট্যাটাসের মাপে নামান</button></div>
+<button class="alt" id="sh">শেয়ার করুন</button>
+<button class="alt" id="bk2">আরেকটি নাম দেখুন</button>
+<div class="promo">নিজের ব্যবসা বাড়াতে চান?<br><a href="https://wa.me/919836983637" target="_blank" rel="noopener">WhatsApp-এ মেসেজ করুন</a> · <a href="https://gyanmokshaa.com" target="_blank" rel="noopener">gyanmokshaa.com</a></div>
+</section>
+
+<section class="s" id="s4"><div class="teaser"><p id="unk"></p></div>
+<button id="bk3">আরেকটি নাম দেখুন</button></section>
+<footer>by <a href="https://gyanmokshaa.com" target="_blank" rel="noopener">Gyanmokshaa LLP</a></footer>
+</main>
+<script src="/names.js"></script>
+<script>
+const $=i=>document.getElementById(i),show=i=>{document.querySelectorAll('.s').forEach(e=>e.classList.toggle('on',e.id===i));scrollTo(0,0)};
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const norm=s=>s.trim().split(/\s+/)[0].toLowerCase();
+const find=q=>{q=norm(q);return NAMES.find(x=>x.n===q||x.e.includes(q))};
+let cur=null,typed='',design=Math.floor(Math.random()*3);
+
+// ---------- canvas helpers ----------
+const FONT={tiro:'"Tiro Bangla"',gal:'Galada',hind:'"Hind Siliguri"',ser:'"Noto Serif Bengali"'};
+const imgs={};
+function animalImg(k){return imgs[k]||(imgs[k]=new Promise(res=>{const i=new Image();i.crossOrigin='anonymous';i.onload=()=>res(i);i.onerror=()=>res(null);i.src=`https://api.iconify.design/noto/${k==='bee'?'honeybee':k}.svg?height=512`}))}
+function setF(c,w,px,fam){c.font=`${w} ${px}px ${fam}`}
+function wrap(c,t,max){const out=[];let l='';for(const w of t.split(' ')){const n=l?l+' '+w:w;if(c.measureText(n).width>max&&l){out.push(l);l=w}else l=n}if(l)out.push(l);return out}
+// a line with a coloured bold lead-in, wrapped and centred
+function runs(c,x,y,lead,text,o,dry){
+  const words=[...lead.split(' ').map(t=>({t,b:1})),...text.split(' ').map(t=>({t,b:0}))];
+  const mw=w=>{setF(c,w.b?700:400,o.px,o.fam);return c.measureText(w.t).width};
+  setF(c,400,o.px,o.fam);const sp=c.measureText(' ').width;const lines=[];let cur=[],cw=0;
+  for(const w of words){const m=mw(w);if(cw+m+(cur.length?sp:0)>o.max&&cur.length){lines.push([cur,cw]);cur=[];cw=0}cw+=m+(cur.length?sp:0);cur.push([w,m])}
+  if(cur.length)lines.push([cur,cw]);
+  if(!dry)lines.forEach(([ws,lw],i)=>{let px=x-lw/2;ws.forEach(([w,m])=>{setF(c,w.b?700:400,o.px,o.fam);c.fillStyle=w.b?o.lead:o.color;c.textAlign='left';c.fillText(w.t,px,y+o.lh*(i+1)-o.lh*.28);px+=m+sp})});
+  return lines.length*o.lh}
+function textBlock(c,x,y,t,o,dry){setF(c,o.w||400,o.px,o.fam);const ls=wrap(c,t,o.max);if(!dry){c.fillStyle=o.color;c.textAlign='center';ls.forEach((l,i)=>c.fillText(l,x,y+o.lh*(i+1)-o.lh*.28))}return ls.length*o.lh}
+function fitName(c,t,fam,w,start,max){let px=start;setF(c,w,px,fam);while(c.measureText(t).width>max&&px>60){px-=4;setF(c,w,px,fam)}return px}
+
+// ---------- shared card body ----------
+function body(c,d,s,th,yTop,dry){
+  const X=540,M=th.textW;let y=yTop;
+  const nameFam=th.nameFam,namePx=fitName(c,d.n,nameFam,th.nameW,Math.round(th.namePx*s),M);
+  y+=textBlock(c,X,y,d.n,{px:namePx,fam:nameFam,w:th.nameW,lh:namePx*1.3,max:2000,color:th.name},dry);
+  y+=th.afterName*s;
+  y+=parts(c,d,s,th,y,dry);
+  y+=26*s;
+  y+=textBlock(c,X,y,d.m,{px:46*s,fam:th.meanFam,lh:46*s*1.42,max:Math.min(M,780),color:th.mean},dry);
+  y+=16*s;
+  const a=ANIMALS[d.a];
+  y+=runs(c,X,y,`কেন ${a[2]}?`,d.w,{px:29*s,fam:FONT.hind,lh:29*s*1.5,max:M,color:th.why,lead:th.lead},dry);
+  if(d.pu){y+=8*s;y+=runs(c,X,y,(d.pl||'পুরাণে')+':',d.pu,{px:29*s,fam:FONT.hind,lh:29*s*1.5,max:M,color:th.why,lead:th.lead},dry)}
+  return y-yTop}
+function parts(c,d,s,th,y,dry){
+  const X=540;const two=!d.r&&d.p.length===2;
+  if(two&&th.boxes){const bw=412,gap=88,bh=136*s;
+    if(!dry){d.p.forEach((p,i)=>{const bx=84+i*(bw+gap);c.strokeStyle=th.box;c.lineWidth=1.5;c.beginPath();c.roundRect(bx,y,bw,bh,18);c.stroke();
+      textBlock(c,bx+bw/2,y+8*s,p[0],{px:46*s,fam:th.keyFam,lh:60*s,max:bw-20,color:th.key});
+      textBlock(c,bx+bw/2,y+70*s,p[1],{px:28*s,fam:FONT.hind,lh:40*s,max:bw-24,color:th.val})});
+      textBlock(c,X,y+36*s,'+',{px:48*s,fam:th.keyFam,lh:60*s,max:80,color:th.key})}
+    return bh}
+  if(two){ // inline: অ নেই + ভয় ভীতি
+    const k=56*s,v=33*s,g=20*s,[a,b]=d.p;
+    const m=(t,px,f)=>{setF(c,400,px,f);return c.measureText(t).width};
+    const W=m(a[0],k,th.keyFam)+m(a[1],v,FONT.hind)+m('+',42*s,FONT.hind)+m(b[0],k,th.keyFam)+m(b[1],v,FONT.hind)+g*4;
+    if(W<=th.textW){if(!dry){let px=X-W/2;const base=y+62*s;c.textAlign='left';const put=(t,p,f,col)=>{setF(c,400,p,f);c.fillStyle=col;c.fillText(t,px,base);px+=c.measureText(t).width+g};
+      put(a[0],k,th.keyFam,th.key);put(a[1],v,FONT.hind,th.val);put('+',42*s,FONT.hind,th.key);put(b[0],k,th.keyFam,th.key);put(b[1],v,FONT.hind,th.val)}return 80*s}}
+  // rows: key  value
+  let h=0;d.p.forEach(p=>{const l=p[0]+'  ';h+=runs(c,X,y+h,p[0],p[1],{px:31*s,fam:FONT.hind,lh:31*s*1.5,max:th.textW,color:th.val,lead:th.key},dry)+4*s});
+  return h}
+function footer(c,H,th,cy){
+  const y=H-(th.footUp||0)-130,l=th.footL||84,r=1080-l;
+  setF(c,400,25,FONT.hind);c.fillStyle=th.foot;
+  if(th.footCenter){const a='আপনার নামের মানে জানুন',b='by Gyanmokshaa';const wa=c.measureText(a).width,wb=c.measureText(b).width,sx=540-(wa+wb+34)/2;c.textAlign='left';c.fillText(a,sx,y+24);c.fillText(b,sx+wa+34,y+24)}
+  else{c.textAlign='left';c.fillText('আপনার নামের মানে জানুন',l,y+24);c.textAlign='right';c.fillText('by Gyanmokshaa',r,y+24)}
+  setF(c,400,34,FONT.hind);c.fillStyle=th.contact;c.textAlign='center';c.fillText('gyanmokshaa.com  •  98369 83637',540,y+80)}
+function compose(c,d,th,top,H,dy){
+  const bottom=H-(th.footUp||0)-168;let s=1.2;
+  while(s>.62&&top+body(c,d,s,th,top,true)>bottom-(H>1350?dy:0))s-=.03;
+  const h=body(c,d,s,th,top,true),room=bottom-(H>1350?dy:0)-(top+h);
+  body(c,d,s,th,top+Math.max(0,room*.28),false)}
+function drawAnimal(c,img,a,x,y,size){if(img)c.drawImage(img,x-size/2,y-size/2,size,size);else{c.font=`${size*.9}px "Noto Color Emoji",sans-serif`;c.textAlign='center';c.textBaseline='middle';c.fillStyle='#000';c.fillText(a[0],x,y);c.textBaseline='alphabetic'}}
+
+// ---------- three designs ----------
+function moon(c,d,img,H){const dy=(H-1350)/2,a=ANIMALS[d.a];
+  const g=c.createRadialGradient(540,H*.24,0,540,H*.24,H*.8);g.addColorStop(0,'#2C3A73');g.addColorStop(.48,'#161D47');g.addColorStop(1,'#0B0F2B');c.fillStyle=g;c.fillRect(0,0,1080,H);
+  let sd=7;const r=()=>(sd=(sd*16807)%2147483647)/2147483647;for(let i=0;i<90*H/1350;i++){const x=r()*1080,y=r()*H,rad=r()*2.4+.8,o=r()*.6+.2;if(y>H-195)continue;c.globalAlpha=o;c.fillStyle='#F4E7C3';c.beginPath();c.arc(x,y,rad,0,7);c.fill()}c.globalAlpha=1;
+  setF(c,400,30,FONT.hind);c.fillStyle='#E5C877';c.textAlign='center';c.fillText('নামকথা',540,98+dy);
+  const my=300+dy,gl=c.createRadialGradient(540,my,150,540,my,290);gl.addColorStop(0,'rgba(243,217,142,.42)');gl.addColorStop(1,'rgba(243,217,142,0)');c.fillStyle=gl;c.beginPath();c.arc(540,my,290,0,7);c.fill();
+  const mg=c.createRadialGradient(473,my-55,10,540,my,175);mg.addColorStop(0,'#FFF6D8');mg.addColorStop(.55,'#F3D98E');mg.addColorStop(1,'#D9B45A');c.fillStyle=mg;c.beginPath();c.arc(540,my,175,0,7);c.fill();
+  drawAnimal(c,img,a,540,my,215);
+  const th={boxes:1,textW:900,nameFam:FONT.tiro,nameW:400,namePx:150,name:'#FBF3DC',afterName:2,key:'#E5C877',val:'#F7EFD9',keyFam:FONT.tiro,box:'rgba(229,200,119,.55)',meanFam:FONT.tiro,mean:'#F7EFD9',why:'#CFD3EA',lead:'#E5C877',foot:'#CFD3EA',contact:'#E5C877'};
+  compose(c,d,th,478+dy,H,dy);footer(c,H,th)}
+function alpona(c,d,img,H){const dy=(H-1350)/2,a=ANIMALS[d.a];
+  c.fillStyle='#A32E1B';c.fillRect(0,0,1080,H);c.strokeStyle='#F8E8CC';c.lineWidth=4;c.strokeRect(30,30,1020,H-60);c.lineWidth=1.5;c.strokeRect(44,44,992,H-88);
+  const fl=(x,y)=>{c.save();c.translate(x,y);c.scale(.5,.5);for(let i=0;i<8;i++){c.save();c.rotate(i*Math.PI/4);c.strokeStyle='#F8E8CC';c.lineWidth=4;c.beginPath();c.moveTo(0,0);c.bezierCurveTo(22,-30,22,-66,0,-96);c.bezierCurveTo(-22,-66,-22,-30,0,0);c.stroke();c.fillStyle='#F8E8CC';c.beginPath();c.arc(0,-112,7,0,7);c.fill();c.restore()}c.fillStyle='#F8E8CC';c.beginPath();c.arc(0,0,13,0,7);c.fill();c.restore()};
+  fl(112,112);fl(968,112);fl(112,H-112);fl(968,H-112);
+  setF(c,400,30,FONT.hind);c.fillStyle='#F8E8CC';c.textAlign='center';c.fillText('নামকথা',540,112+dy);
+  const my=298+dy;c.strokeStyle='#F8E8CC';c.lineWidth=4;c.beginPath();c.arc(540,my,168,0,7);c.stroke();c.fillStyle='#F8E8CC';c.beginPath();c.arc(540,my,155,0,7);c.fill();
+  drawAnimal(c,img,a,540,my,205);
+  const th={boxes:0,textW:800,nameFam:FONT.gal,nameW:400,namePx:176,name:'#FFF6E3',afterName:0,key:'#FFD98A',val:'#FBEFD8',keyFam:FONT.gal,meanFam:FONT.tiro,mean:'#FBEFD8',why:'#FBE3C4',lead:'#FFD98A',foot:'#FBE3C4',contact:'#FFD98A',footCenter:1,footUp:14};
+  compose(c,d,th,478+dy,H,dy);footer(c,H,th)}
+function arch(c,d,img,H){const dy=(H-1350)/2,a=ANIMALS[d.a];
+  c.fillStyle='#F7F0E1';c.fillRect(0,0,1080,H);
+  const ah=470+dy,g=c.createLinearGradient(0,0,0,ah);g.addColorStop(0,'#0F5C5C');g.addColorStop(1,'#127272');c.fillStyle=g;c.beginPath();c.moveTo(270,0);c.lineTo(810,0);c.lineTo(810,ah-270);c.arc(540,ah-270,270,0,Math.PI);c.closePath();c.fill();
+  c.strokeStyle='#D9B45A';c.lineWidth=2;c.beginPath();c.moveTo(288,0);c.lineTo(288,ah-270);c.arc(540,ah-270,252,Math.PI,0,true);c.lineTo(792,0);c.stroke();
+  setF(c,400,30,FONT.hind);c.fillStyle='#F3DFA5';c.textAlign='center';c.fillText('নামকথা',540,76);
+  drawAnimal(c,img,a,540,ah-175,205);
+  const th={boxes:0,textW:880,nameFam:FONT.ser,nameW:700,namePx:136,name:'#0F5C5C',afterName:8,key:'#A87A1E',val:'#123F40',keyFam:FONT.ser,meanFam:FONT.ser,mean:'#123F40',why:'#3C5F5F',lead:'#A87A1E',foot:'#3C5F5F',contact:'#0F5C5C',footL:92};
+  compose(c,d,th,ah+6,H,dy);footer(c,H,th)}
+const DESIGNS=[moon,alpona,arch];
+async function render(cv,d,di,H){cv.width=1080;cv.height=H;const c=cv.getContext('2d');
+  await Promise.all(['400 40px "Tiro Bangla"','400 40px Galada','400 30px "Hind Siliguri"','700 30px "Hind Siliguri"','400 40px "Noto Serif Bengali"','700 40px "Noto Serif Bengali"'].map(f=>document.fonts.load(f,'অভয়সুচন্দ্রাa').catch(()=>{})));
+  const img=await animalImg(d.a);c.textBaseline='alphabetic';DESIGNS[di](c,d,img,H)}
+async function preview(){await render($('cv'),cur,design,1350)}
+async function blobOf(H){const t=document.createElement('canvas');await render(t,cur,design,H);return new Promise(r=>t.toBlob(r,'image/png'))}
+async function dl(H,suffix){const b=await blobOf(H),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`namkotha-${cur.e[0]}${suffix}.png`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
+
+// ---------- flow ----------
+function open(d){cur=d;design=Math.floor(Math.random()*3);
+  if(store.get('nk_reg')){preview().then(()=>show('s3'));return}
+  $('tz').innerHTML='';const b=document.createElement('b');b.textContent=d.n;const p=document.createElement('p');p.textContent=d.m;const l=document.createElement('div');l.className='lock';l.textContent='নামের ভাঙন, প্রাণী আর পুরো কার্ড দেখতে নিচের ঘরগুলো ভরুন';$('tz').append(b,p,l);
+  $('rn').value=$('nm').value.trim();show('s2')}
+$('f1').onsubmit=e=>{e.preventDefault();typed=$('nm').value.trim();if(!typed)return;const d=find(typed);
+  if(d)return open(d);
+  cur=null;if(store.get('nk_reg')){fetch('/api/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({unknownOnly:1,cardName:typed})}).catch(()=>{});$('unk').textContent=`“${typed}” নামটি আমাদের খাতায় এখনও ওঠেনি। যাচাই করে যোগ করা হবে, তখন আবার দেখবেন।`;show('s4');return}
+  $('tz').innerHTML='';const p=document.createElement('p');p.textContent=`“${typed}” নামটি আমাদের খাতায় এখনও ওঠেনি। আন্দাজে ভুল অর্থ না দিয়ে আমরা যাচাই করে যোগ করি। নম্বর দিয়ে রাখুন, যোগ হলে WhatsApp-এ জানাব।`;$('tz').append(p);$('rn').value=typed;show('s2')};
+document.querySelectorAll('input[name=biz]').forEach(r=>r.onchange=()=>{$('bzw').hidden=r.value!=='yes'||!r.checked});
+$('f2').onsubmit=async e=>{e.preventDefault();$('er').textContent='';
+  const ph=$('ph').value.replace(/\D/g,'').replace(/^(91|0)(?=\d{10}$)/,'');
+  if(!/^[6-9]\d{9}$/.test(ph)){$('er').textContent='সঠিক ১০ সংখ্যার WhatsApp নম্বর লিখুন।';return}
+  const biz=document.querySelector('input[name=biz]:checked').value;
+  $('go').disabled=true;$('go').textContent='একটু অপেক্ষা করুন…';
+  try{const r=await fetch('/api/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:$('rn').value.trim(),phone:ph,hasBusiness:biz==='yes',businessName:$('bz').value.trim(),consent:$('ok').checked,cardName:cur?cur.n:typed,known:!!cur})});
+    if(!r.ok)throw 0;store.set('nk_reg','1');
+    if(cur){await preview();show('s3')}else{$('unk').textContent=`ধন্যবাদ! “${typed}” নামটি যাচাই করে যোগ করা হলে WhatsApp-এ জানানো হবে।`;show('s4')}
+  }catch(x){$('er').textContent='এখন জমা হলো না। ইন্টারনেট দেখে আবার চেষ্টা করুন।'}
+  $('go').disabled=false;$('go').textContent='পুরো কার্ড পান'};
+$('other').onclick=()=>{design=(design+1)%3;preview()};
+$('dlP').onclick=()=>dl(1350,'');$('dlS').onclick=()=>dl(1920,'-status');
+$('sh').onclick=async()=>{const b=await blobOf(1350),f=new File([b],`namkotha-${cur.e[0]}.png`,{type:'image/png'});
+  if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:'নামকথা',text:`${cur.n} নামের মানে জানেন? আপনার নামেরটাও দেখুন: ${location.origin}`})}catch(e){}}else dl(1350,'')};
+['bk1','bk2','bk3'].forEach(i=>$(i).onclick=()=>{$('nm').value='';show('s1');$('nm').focus()});
+window.__nk={render,find};
+</script></body></html>
