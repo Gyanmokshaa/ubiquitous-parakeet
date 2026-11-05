@@ -20,6 +20,7 @@ test('ভারতীয় কমা ও টাকা', () => {
   assert.equal(L.formatNumber(12.5), '১২.৫');
   assert.equal(L.formatNumber(-2500), '-২,৫০০');
   assert.equal(L.formatMoney(100000), '₹১,০০,০০০');
+  assert.equal(L.formatMoney(-1200), '-₹১,২০০');
 });
 
 test('তারিখ বাংলায়, ভারতের সময়ে', () => {

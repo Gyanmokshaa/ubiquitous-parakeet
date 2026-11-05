@@ -43,7 +43,8 @@ export function formatNumber(n) {
 }
 
 export function formatMoney(n) {
-  return '₹' + formatNumber(n);
+  const num = Number(n) || 0;
+  return (num < 0 ? '-₹' : '₹') + formatNumber(Math.abs(num));
 }
 
 const BN_MONTHS = [
